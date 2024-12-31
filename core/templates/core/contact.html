@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background: linear-gradient(135deg,rgba(16, 108, 206, 0.76),rgba(131, 232, 8, 0.75));
+            color: white;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling */
+        header {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding-top: 40px;
+        }
+
+        header.active {
+            transform: translateX(0);
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        header nav ul li {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        header nav ul li a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        header nav ul li a:hover {
+            background: #1e8449;
+        }
+
+        /* Hamburger Button */
+        .hamburger {
+            display: block;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #2c3e50;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        /* Top Icons */
+        .top-icons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-icons a {
+            color: white;
+            font-size: 26px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .top-icons a:hover {
+            background-color: #2ecc71;
+            transform: scale(1.2);
+        }
+
+        /* Main Content Area */
+        main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 40px 20px;
+            box-sizing: border-box;
+            transition: margin-left 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        main.active {
+            margin-left: 0;
+        }
+
+        /* Profile Card Styling */
+        .profile-card {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* Profile Picture */
+        .profile-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .profile-card input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .profile-card button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .profile-card button#editBtn {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .profile-card button#saveBtn {
+            background-color: #28A745;
+            color: white;
+        }
+
+        .profile-card button#cancelBtn {
+            background-color: #DC3545;
+            color: white;
+        }
+
+        .profile-card label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Keyframe Animation */
+        @keyframes fadeInUp {
+            0% {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            header.active + main {
+                margin-left: 0;
+            }
+
+            header {
+                width: 200px;
+            }
+
+            .profile-card {
+                width: 100%;
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hamburger Button -->
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <header id="sidebar">
+        <h1>Seagro</h1>
+        <nav>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/job-board/"><i class="fas fa-briefcase"></i> Job Board</a></li>
+                <li><a href="/learning-center/"><i class="fas fa-book"></i> Learning Center</a></li>
+                <li><a href="/community/"><i class="fas fa-users"></i> Community</a></li>
+                <li><a href="/bike-sharing/"><i class="fas fa-bicycle"></i> Bike Sharing</a></li>
+                <li><a href="/tech-news/"><i class="fas fa-laptop"></i> Tech News</a></li>
+                <li><a href="/chat/"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="/content-sharing/"><i class="fas fa-share-alt"></i> Content Sharing</a></li>
+                <li><a href="/todo/"><i class="fas fa-check-circle"></i> Todo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Top Icons -->
+    <div class="top-icons">
+        <a href="/" title="Home" aria-label="Home Page"><i class="fas fa-home"></i></a>
+        <a href="/contact/" title="Profile"><i class="fas fa-user-circle"></i></a>
+        <a href="/about/" title="About"><i class="fas fa-info-circle"></i></a>
+    </div>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <!-- Profile Picture -->
+                <div>
+                    <label for="profileImageInput">
+                        <img id="profileImage" src="https://via.placeholder.com/100" alt="Profile Picture">
+                    </label>
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                </div>
+
+                <!-- Editable Fields -->
+                <div>
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" value="John Doe" disabled>
+                </div>
+                <div>
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" value="johndoe@example.com" disabled>
+                </div>
+                <div>
+                    <label for="joinedDate">Joined On</label>
+                    <input type="text" id="joinedDate" value="January 1, 2020" disabled>
+                </div>
+                <div>
+                    <label for="status">Membership Status</label>
+                    <input type="text" id="status" value="Active" disabled>
+                </div>
+
+                <!-- Buttons -->
+                <button type="button" id="editBtn" onclick="enableEditing()">Edit</button>
+                <button type="submit" id="saveBtn" style="display: none;">Save Changes</button>
+                <button type="button" id="cancelBtn" onclick="cancelChanges()" style="display: none;">Cancel</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Store original values to restore on cancel
+        let originalValues = {};
+
+        // Enable editing
+        function enableEditing() {
+            const inputs = document.querySelectorAll('#profileForm input:not([type="file"])');
+            const editBtn = document.getElementById('editBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            // Save original values
+            inputs.forEach((input) => {
+                originalValues[input.id] = input.value;
+                input.disabled = false;
+            });
+
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'block';
+            cancelBtn.style.display = 'block';
+        }
+
+        // Cancel editing
+        function cancelChanges() {
+            const inputs = document.querySelectorAll('#profileForm input:not([type="file"])');
+            const editBtn = document.getElementById('editBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            // Restore original values
+            inputs.forEach((input) => {
+                input.value = originalValues[input.id];
+                input.disabled = true;
+            });
+
+            editBtn.style.display = 'block';
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+        }
+
+        // Save changes
+        function saveProfile(event) {
+            event.preventDefault();
+            alert('Profile saved!');
+            cancelChanges(); // After saving, cancel editing
+        }
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.querySelector('main').classList.toggle('active');
+        }
+
+        // Preview image before upload
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const output = document.getElementById('profileImage');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
+</html>

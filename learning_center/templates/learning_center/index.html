@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Center | Seagro</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg,rgba(16, 108, 206, 0.76),rgba(131, 232, 8, 0.75));
+            color:rgb(216, 212, 212);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        header {
+            width: 250px;
+            background : linear-gradient(135deg, rgba(21, 29, 193, 0.97), rgb(5, 18, 22));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        header.active {
+            transform: translateX(0);
+        }
+
+        .hamburger {
+            display: block;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 30px;
+            color:rgb(0, 0, 0);
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        header nav ul li {
+            margin: 15px 0;
+            text-align: center;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        header nav ul li a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        header nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content Styling */
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            margin-left: 0;
+            text-align: center;
+            transition: margin-left 0.3s ease;
+        }
+
+        header.active + main {
+            margin-left: 250px;
+        }
+
+        main h1 {
+            font-size: 36px;
+            color: #ffa500;
+            margin-bottom: 20px;
+        }
+
+        .intro-text {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #aaaaaa;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 60%;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .search-container input:focus {
+            border-color:rgb(2, 2, 2);
+            outline: none;
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .category {
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            height: 250px;
+            transition: transform 0.3s ease;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .category:nth-child(1) {
+            background: linear-gradient(135deg, #4e54c8, #8f94fb); /* Technology */
+        }
+
+        .category:nth-child(2) {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Business */
+        }
+
+        .category:nth-child(3) {
+            background: linear-gradient(135deg, #76b852, #8dc26f); /* Personal Development */
+        }
+
+        .category:nth-child(4) {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* Creative Skills */
+        }
+
+        .category:nth-child(5) {
+            background: linear-gradient(135deg, #667eea, #764ba2); /* Health & Wellness */
+        }
+
+        .category:nth-child(6) {
+            background: linear-gradient(135deg, #43cea2, #185a9d); /* Finance */
+        }
+
+        .category:nth-child(7) {
+            background: linear-gradient(135deg, #ff512f, #dd2476); /* Marketing */
+        }
+
+        .category:nth-child(8) {
+            background: linear-gradient(135deg, #3a6186, #89253e); /* Leadership */
+        }
+
+        .category h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .category p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .category a {
+            color: #fff8dc;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .category a:hover {
+            color: #ffffff;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        footer {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header.active + main {
+                margin-left: 0;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
+
+            .category {
+                width: 80%;
+                margin: auto;
+                margin-bottom: 20px;
+                height: 200px;
+            }
+
+            .search-container input {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hamburger Button -->
+    <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+
+    <!-- Sidebar -->
+    <header id="sidebar">
+        <h1>Seagro</h1>
+        <nav>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/about/"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="/contact/"><i class="fas fa-user"></i> User Profile</a></li>
+                <li><a href="/job-board/"><i class="fas fa-briefcase"></i> Job Board</a></li>
+                <li><a href="/learning-center/"><i class="fas fa-book"></i> Learning Center</a></li>
+                <li><a href="/community/"><i class="fas fa-users"></i> Community</a></li>
+                <li><a href="/bike-sharing/"><i class="fas fa-bicycle"></i> Bike Sharing</a></li>
+                <li><a href="/tech-news/"><i class="fas fa-laptop"></i> Tech News</a></li>
+                <li><a href="/chat/"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="/content-sharing/"><i class="fas fa-share-alt"></i> Content Sharing</a></li>
+                <li><a href="/todo/"><i class="fas fa-check-circle"></i> Todo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section>
+            <h1>Learning Center</h1>
+            
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Search for courses, tutorials..." />
+            </div>
+
+            <!-- Categories Section -->
+            <h2>Course Categories</h2>
+            <div class="categories">
+                <div class="category">
+                    <h3>Technology</h3>
+                    <p>Explore the latest in software development, web design, AI, and more.</p>
+                    <a href="#">Explore Technology Courses</a>
+                </div>
+                <div class="category">
+                    <h3>Business</h3>
+                    <p>Master business strategies, marketing, entrepreneurship, and leadership skills.</p>
+                    <a href="#">Explore Business Courses</a>
+                </div>
+                <div class="category">
+                    <h3>Personal Development</h3>
+                    <p>Build skills in communication, time management, and personal growth.</p>
+                    <a href="#">Explore Personal Development Courses</a>
+                </div>
+                <div class="category">
+                    <h3>Creative Skills</h3>
+                    <p>Learn design, photography, video editing, and other creative skills.</p>
+                    <a href="#">Explore Creative Skills Courses</a>
+                </div>
+                <div class="category">
+                    <h3>Health & Wellness</h3>
+                    <p>Learn about physical fitness, mental health, nutrition, and wellness strategies.</p>
+                    <a href="#">Explore Health Courses</a>
+                </div>
+                <div class="category">
+                    <h3>Finance</h3>
+                    <p>Understand financial management, investment strategies, and personal finance tips.</p>
+                    <a href="#">Explore Finance Courses</a>
+                </div>
+                <div class="category">
+                    <h3>Marketing</h3>
+                    <p>Discover the principles of digital marketing, branding, social media, and more.</p>
+                    <a href="#">Explore Marketing Courses</a>
+                </div>
+                <div class="category">
+                    <h3>Leadership</h3>
+                    <p>Develop leadership skills, team management, and strategies for success.</p>
+                    <a href="#">Explore Leadership Courses</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Seagro | All Rights Reserved</p>
+    </footer>
+
+    <!-- JavaScript for Sidebar Toggle -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
