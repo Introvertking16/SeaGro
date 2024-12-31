@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Seagro</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg,rgba(16, 108, 206, 0.76),rgba(131, 232, 8, 0.75));
+            color: #333;
+            opacity: 0;
+            animation: fadeIn 1s forwards; /* Fade-in effect on page load */
+        }
+
+        /* Animation for page load */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Sidebar Styling */
+        header {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        header.active {
+            transform: translateX(0);
+        }
+
+        .hamburger {
+            display: block;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #2c3e50;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        header nav ul li {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        header nav ul li a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        header nav ul li a:hover {
+            background: #1e8449;
+        }
+
+        /* Top Right Icons Container */
+        .top-icons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-icons a {
+            color: white;
+            font-size: 26px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .top-icons a:hover {
+            background-color: #2ecc71;
+            transform: scale(1.2);
+        }
+
+        /* Main Content Styling */
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            margin-left: 0;
+            text-align: center;
+            transition: margin-left 0.3s ease;
+            animation: slideUp 1s ease-out; /* Animation for main content */
+        }
+
+        /* Slide-up effect for main content */
+        @keyframes slideUp {
+            0% {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        header.active + main {
+            margin-left: 250px;
+        }
+
+        main h1 {
+            font-size: 42px;
+            color: rgb(2, 2, 2);
+        }
+
+        /* Chatbox Styling */
+        .chat-container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: rgb(254, 250, 250);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            position: relative; /* Allows positioning of back button */
+        }
+
+        .chat-box {
+            height: 250px;
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .chat-box .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #e9ecef;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .chat-box .message.sent {
+            background-color: #d1e7ff;
+            margin-left: auto;
+            color: #004085;
+        }
+
+        .chat-box .message.received {
+            background-color: #e2f7e2;
+            color: #155724;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 0px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: linear-gradient(to right, #96c93d, #00b09b);
+            transform: scale(1.05);
+        }
+
+        /* Back Button Styling */
+        .back-btn {
+            background: none;
+            color: #2c3e50;
+            border: none;
+            font-size: 30px;
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: absolute; /* Fix the position */
+            top: 20px; /* Align at the top */
+            left: 20px; /* Align at the left */
+            z-index: 10; /* Ensure it stays on top */
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .back-btn i {
+            font-size: 30px;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+
+            header.active + main {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hamburger Button -->
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <header id="sidebar">
+        <h1>Seagro</h1>
+        <nav>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/job-board/"><i class="fas fa-briefcase"></i> Job Board</a></li>
+                <li><a href="/learning-center/"><i class="fas fa-book"></i> Learning Center</a></li>
+                <li><a href="/community/"><i class="fas fa-users"></i> Community</a></li>
+                <li><a href="/bike-sharing/"><i class="fas fa-bicycle"></i> Bike Sharing</a></li>
+                <li><a href="/tech-news/"><i class="fas fa-laptop"></i> Tech News</a></li>
+                <li><a href="/chat/"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="/content-sharing/"><i class="fas fa-share-alt"></i> Content Sharing</a></li>
+                <li><a href="/todo/"><i class="fas fa-check-circle"></i> Todo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Top Icons -->
+    <div class="top-icons">
+        <a href="/" title="Home" aria-label="Home Page"><i class="fas fa-home"></i></a>
+        <a href="/contact/" title="Profile"><i class="fas fa-user-circle"></i></a>
+        <a href="/about/" title="About"><i class="fas fa-info-circle"></i></a>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <section>
+            <div class="chat-container">
+                <!-- Back Button with Icon (Positioned in the left corner) -->
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+
+                <h1>Welcome to Chat</h1>
+                <p>Communicate with this chatbot and gain new technology.</p>
+
+                <div class="chat-box" id="chatBox">
+                    <!-- Bot's Initial Message -->
+                    <div class="message received">Hello! How can I help you today?</div>
+                </div>
+
+                <textarea class="chat-input" id="chatInput" rows="3" placeholder=" Type a message..."></textarea>
+                <button class="send-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Seagro. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Function to handle message sending
+        function sendMessage() {
+            var chatInput = document.getElementById('chatInput');
+            var message = chatInput.value.trim();
+
+            if (message) {
+                var chatBox = document.getElementById('chatBox');
+                var messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', 'sent');
+                messageDiv.textContent = message;
+                chatBox.appendChild(messageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the bottom
+
+                chatInput.value = '';  // Clear input field
+
+                // Simulate bot response
+                setTimeout(function() {
+                    var botResponse = generateBotResponse(message);
+                    var botMessageDiv = document.createElement('div');
+                    botMessageDiv.classList.add('message', 'received');
+                    botMessageDiv.textContent = botResponse;
+                    chatBox.appendChild(botMessageDiv);
+                    chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the bottom
+                }, 1000);  // Simulating a delay for the bot's response
+            }
+        }
+
+        // Function to generate bot response
+        function generateBotResponse(message) {
+    message = message.toLowerCase().trim();
+
+    if (message.includes('hello') || message.includes('hi')) {
+        return 'Hello! How can I help you?';
+    } else if (message.includes('how are you')) {
+        return 'I\'m just a bot, but I\'m doing well! How can I assist you?';
+    } else if (message.includes('who developed you')) {
+        return 'I was developed by a team of passionate engineers!';
+    } else if (message.includes('what is your name')) {
+        return 'I am your friendly Chatbot!';
+    } else if (message.includes('tell me a joke')) {
+        return 'Why don’t skeletons fight each other? Because they don’t have the guts!';
+    } else if (message.includes('what is the capital of france')) {
+        return 'The capital of France is Paris.';
+    } else if (message.includes('list top 5 it companies')) {
+        return 'The top 5 IT companies are Google, Microsoft, Apple, Amazon, and IBM.';
+    } else if (message.includes('who is the founder of apple')) {
+        return 'The founder of Apple is Steve Jobs.';
+    } else if (message.includes('what is python')) {
+        return 'Python is a popular programming language known for its simplicity and versatility.';
+    } else if (message.includes('who is batman')) {
+        return 'Batman is a fictional superhero created by DC Comics.';
+    } else if (message.includes('what is the time')) {
+        const now = new Date();
+        return `The current time is ${now.toLocaleTimeString()}.`;
+    } else if (message.includes('how does a computer work')) {
+        return 'A computer processes input data using hardware and software to provide meaningful output.';
+    } else if (message.includes('what is artificial intelligence')) {
+        return 'Artificial Intelligence (AI) is the simulation of human intelligence in machines.';
+    } else if (message.includes('can you help me with coding')) {
+        return 'Of course! Let me know what coding problem you\'re facing.';
+    } else if (message.includes('what is the internet')) {
+        return 'The Internet is a global network that connects millions of private, public, academic, and business networks.';
+    } else if (message.includes('what is your favorite color')) {
+        return 'I don\'t have favorites, but blue is often considered calming!';
+    } else if (message.includes('who is the ceo of microsoft')) {
+        return 'The current CEO of Microsoft is Satya Nadella.';
+    } else if (message.includes('what is machine learning')) {
+        return 'Machine Learning is a branch of AI that allows computers to learn from data and improve over time without being explicitly programmed.';
+    } else if (message.includes('what is 2+2')) {
+        return '2+2 is 4. Quick maths!';
+    } else if (message.includes('who is the founder of tesla')) {
+        return 'The founder of Tesla is Elon Musk.';
+    } else if (message.includes('what is blockchain')) {
+        return 'Blockchain is a decentralized, distributed ledger technology used to record transactions securely.';
+    } else if (message.includes('what is cryptocurrency')) {
+        return 'Cryptocurrency is a digital or virtual currency that uses cryptography for security.';
+    } else if (message.includes('who is albert einstein')) {
+        return 'Albert Einstein was a theoretical physicist known for the theory of relativity.';
+    } else if (message.includes('what is the speed of light')) {
+        return 'The speed of light is approximately 299,792 kilometers per second.';
+    } else if (message.includes('who is the first man on the moon')) {
+        return 'The first man on the moon was Neil Armstrong.';
+    } else if (message.includes('tell me a fun fact')) {
+        return 'Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3000 years old and still edible!';
+    } else {
+        return 'I\'m not sure how to respond to that. Can you please rephrase?';
+    }
+}
+
+
+        // Function for the back button
+        function goBack() {
+            window.history.back(); // This will take the user to the previous page
+        }
+
+        const sidebar = document.getElementById('sidebar');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            if (sidebar.classList.contains('active')) {
+                document.addEventListener('click', closeSidebarOnClickOutside);
+            } else {
+                document.removeEventListener('click', closeSidebarOnClickOutside);
+            }
+        }
+
+        function closeSidebarOnClickOutside(event) {
+            if (!sidebar.contains(event.target) && !document.querySelector('.hamburger').contains(event.target)) {
+                sidebar.classList.remove('active');
+                document.removeEventListener('click', closeSidebarOnClickOutside);
+            }
+        }
+    </script>
+</body>
+</html>
