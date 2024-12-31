@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech News</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg,rgba(16, 108, 206, 0.76),rgba(131, 232, 8, 0.75));
+            color: #333;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        /* Animation for page load */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Scroll-down effect for the sidebar */
+        .scroll-down-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            text-align: center;
+            overflow-y: scroll;
+            height: 0;
+            opacity: 0;
+            animation: scrollDown 2s ease-in-out forwards;
+        }
+
+        @keyframes scrollDown {
+            0% {
+                height: 0;
+                opacity: 0;
+            }
+            100% {
+                height: 300px; /* Adjust height as needed */
+                opacity: 1;
+            }
+        }
+
+        /* Main Content Styling */
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            margin-left: 0;
+            text-align: center;
+            transition: margin-left 0.3s ease;
+            animation: slideUp 1s ease-out;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        @keyframes slideUp {
+            0% {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Enhanced News Box */
+        .news-box {
+            background-color: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .news-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-box a {
+            font-size: 18px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 12px;
+            display: block;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .news-box a:hover {
+            color: #2ecc71;
+            background-color: #f0f8f1;
+        }
+
+        /* Footer Styling */
+        footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: auto;
+        }
+
+        /* Top Right Icons */
+        .top-icons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-icons a {
+            color: white;
+            font-size: 26px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .top-icons a:hover {
+            background-color: #2ecc71;
+            transform: scale(1.2);
+        }
+
+        /* Sidebar Styling */
+        header {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        header.active {
+            transform: translateX(0);
+        }
+
+        .hamburger {
+            display: block;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #2c3e50;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        header nav ul li {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        header nav ul li a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        header nav ul li a:hover {
+            background: #1e8449;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+
+            header.active + main {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hamburger Button -->
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <header id="sidebar">
+        <h1>Seagro</h1>
+        <nav>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/job-board/"><i class="fas fa-briefcase"></i> Job Board</a></li>
+                <li><a href="/learning-center/"><i class="fas fa-book"></i> Learning Center</a></li>
+                <li><a href="/community/"><i class="fas fa-users"></i> Community</a></li>
+                <li><a href="/bike-sharing/"><i class="fas fa-bicycle"></i> Bike Sharing</a></li>
+                <li><a href="/tech-news/"><i class="fas fa-laptop"></i> Tech News</a></li>
+                <li><a href="/chat/"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="/content-sharing/"><i class="fas fa-share-alt"></i> Content Sharing</a></li>
+                <li><a href="/todo/"><i class="fas fa-check-circle"></i> Todo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Top Icons -->
+    <div class="top-icons">
+        <a href="/" title="Home" aria-label="Home Page"><i class="fas fa-home"></i></a>
+        <a href="/contact/" title="Profile"><i class="fas fa-user-circle"></i></a>
+        <a href="/about/" title="About"><i class="fas fa-info-circle"></i></a>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <section>
+            <h1>Tech News</h1>
+            <p><h3>Stay updated with the latest tech news from the world of technology and innovation.</h3></p>
+            <div class="news-box"><a href="https://fstoppers.com/gear/apple-announces-iphone-16-pro-and-iphone-16-pro-max-new-features-improved-camera-679086">Apple Announces New iPhone with Improved Features</a></div>
+            <div class="news-box"><a href="https://www.wix.com/encyclopedia/definition/artificial-intelligence?utm_source=bing&utm_medium=cpc&utm_campaign=506190486^1276534656014655^search%20-%20dsa&experiment_id=wix^b^^&msclkid=21e0b99fc2fe129fa6a0deec1c8367a4">AI Breakthroughs: What’s Next for Artificial Intelligence?</a></div>
+            <div class="news-box"><a href="https://techspective.net/2024/07/31/the-future-of-cloud-computing-insights-from-a-microsoft-solutions-partner/#:~:text=Some%20information%20provided%20by%20a%20Microsoft%20Solutions%20Partner,increased%20security%20and%20compliance%2C%20and%20quantum%20computing%20capabilities.">Microsoft Unveils the Future of Cloud Computing</a></div>
+            <div class="news-box"><a href="https://www.hindustantimes.com/business/google-plans-new-security-steps-to-tackle-online-scams-101697730887720.html#:~:text=Among%20the%20measures%20is%20a%20ramped%20up%20threat,share%20more%20widely%20to%20detail%20new%20scam%20patterns.">Google Introduces New Security Measures for Online Safety</a></div>
+            <div class="news-box"><a href="https://www.udemy.com/course/introduction-to-electric-vehicles/?utm_source=bing&utm_medium=udemyads&utm_campaign=BG-Search_DSA_Beta_Prof_la.EN_cc.India&campaigntype=Search&portfolio=Bing-India&language=EN&product=Course&test=&audience=DSA&topic=&priority=Beta&utm_content=deal4584&utm_term=_._ag_1318316830212069_._ad__._kw_Engineering_._de_c_._dm__._pl__._ti_dat-2334194466907544%3Aloc-90_._li_143956_._pd__._&matchtype=b&msclkid=9acd451877411ec117d3226ba87f38e2&couponCode=IND21PM">The Rise of Electric Vehicles: What You Need to Know</a></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Seagro. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            if (sidebar.classList.contains('active')) {
+                document.addEventListener('click', closeSidebarOnClickOutside);
+            } else {
+                document.removeEventListener('click', closeSidebarOnClickOutside);
+            }
+        }
+
+        function closeSidebarOnClickOutside(event) {
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            const isHamburgerButton = event.target.classList.contains('hamburger');
+            
+            if (!isClickInsideSidebar && !isHamburgerButton) {
+                sidebar.classList.remove('active');
+                document.removeEventListener('click', closeSidebarOnClickOutside);
+            }
+        }
+    </script>
+</body>
+</html>

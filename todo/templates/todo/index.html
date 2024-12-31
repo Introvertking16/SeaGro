@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Seagro</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg,rgba(16, 108, 206, 0.76),rgba(131, 232, 8, 0.75));
+            color: #333;
+            opacity: 0;
+            animation: fadeIn 1s forwards; /* Fade-in effect on page load */
+        }
+
+        /* Animation for page load */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Sidebar Styling */
+        header {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        header.active {
+            transform: translateX(0);
+        }
+
+        .hamburger {
+            display: block;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #2c3e50;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        header nav ul li {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        header nav ul li a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        header nav ul li a:hover {
+            background: #1e8449;
+        }
+
+        /* Top Right Icons Container */
+        .top-icons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-icons a {
+            color: white;
+            font-size: 26px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .top-icons a:hover {
+            background-color: #2ecc71;
+            transform: scale(1.2);
+        }
+
+        /* Main Content Styling */
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            margin-left: 0;
+            text-align: center;
+            transition: margin-left 0.3s ease;
+            animation: slideUp 1s ease-out; /* Animation for main content */
+        }
+
+        /* Slide-up effect for main content */
+        @keyframes slideUp {
+            0% {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        header.active + main {
+            margin-left: 250px;
+        }
+
+        main h1 {
+            font-size: 42px;
+            color: rgb(2, 2, 2);
+        }
+
+        /* Let's Go Button Styling */
+       
+
+
+
+        /* Footer Styles */
+        footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+
+            header.active + main {
+                margin-left: 0;
+            }
+        }
+        /* Todo List Container */
+.todo-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Container */
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.input-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.input-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+.input-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Todo List */
+#todoList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#todoList li {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeIn 0.3s ease-in-out;
+    font-size: 16px;
+}
+
+/* Buttons in Todo List */
+.complete-btn, .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+}
+
+.complete-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.complete-btn:hover {
+    background-color: #218838;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Completed Task Styling */
+.completed {
+    text-decoration: line-through;
+    color: #aaaaaa;
+    background-color: #e0ffe0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Hamburger Button -->
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <header id="sidebar">
+        <h1>Seagro</h1>
+        <nav>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/job-board/"><i class="fas fa-briefcase"></i> Job Board</a></li>
+                <li><a href="/learning-center/"><i class="fas fa-book"></i> Learning Center</a></li>
+                <li><a href="/community/"><i class="fas fa-users"></i> Community</a></li>
+                <li><a href="/bike-sharing/"><i class="fas fa-bicycle"></i> Bike Sharing</a></li>
+                <li><a href="/tech-news/"><i class="fas fa-laptop"></i> Tech News</a></li>
+                <li><a href="/chat/"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="/content-sharing/"><i class="fas fa-share-alt"></i> Content Sharing</a></li>
+                <li><a href="/todo/"><i class="fas fa-check-circle"></i> Todo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Top Icons -->
+    <div class="top-icons">
+        <a href="/" title="Home" aria-label="Home Page"><i class="fas fa-home"></i></a>
+        <a href="/contact/" title="Profile"><i class="fas fa-user-circle"></i></a>
+        <a href="/about/" title="About"><i class="fas fa-info-circle"></i></a>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <section>
+            <h1>Welcome to To-do Lists</h1>
+            <p>Manage your tasks efficiently with our to-do lists feature.</p>
+        
+            <div class="todo-container">
+                <div class="input-container">
+                    <input type="text" id="taskInput" placeholder="Enter your task...">
+                    <button onclick="addTask()">Add Task</button>
+                </div>
+        
+                <ul id="todoList"></ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Seagro. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Function to add a new task
+       // Function to add a new task
+function addTask() {
+    var taskInput = document.getElementById("taskInput");
+    var taskText = taskInput.value.trim();
+
+    if (taskText !== "") {
+        var todoList = document.getElementById("todoList");
+
+        var listItem = document.createElement("li");
+        listItem.innerHTML = `
+            ${taskText}
+            <button class="complete-btn" onclick="completeTask(this)">Complete</button>
+            <button class="delete-btn" onclick="deleteTask(this)">Delete</button>
+        `;
+
+        todoList.appendChild(listItem);
+        taskInput.value = ""; // Clear input field
+    }
+}
+
+// Function to mark a task as completed
+function completeTask(button) {
+    var taskItem = button.parentElement;
+    taskItem.classList.toggle("completed");
+}
+
+// Function to delete a task
+function deleteTask(button) {
+    var taskItem = button.parentElement;
+    taskItem.remove();
+}
+
+// Add event listener for Enter key submission
+document.getElementById("taskInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevent the default form submission behavior
+        addTask(); // Call the addTask function to add the task
+    }
+});
+
+
+        const sidebar = document.getElementById('sidebar');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            if (sidebar.classList.contains('active')) {
+                document.addEventListener('click', closeSidebarOnClickOutside);
+            } else {
+                document.removeEventListener('click', closeSidebarOnClickOutside);
+            }
+        }
+
+        function closeSidebarOnClickOutside(event) {
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            const isHamburgerButton = event.target.classList.contains('hamburger');
+            
+            if (!isClickInsideSidebar && !isHamburgerButton) {
+                sidebar.classList.remove('active');
+                document.removeEventListener('click', closeSidebarOnClickOutside);
+            }
+        }
+    </script>
+</body> 
+
+</html>
